@@ -1,5 +1,10 @@
 #ifndef BEN_NODE
 #define BEN_NODE
+#include <string>
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
 class Node{
     public:
         typedef string nodeType;
@@ -7,8 +12,8 @@ class Node{
         /**
          * Pointer mutators and accessors 
         */
-        void setNext(const Node* pNext);
-        void setPrev(const Node* pPrev);
+        void setNext(const Node* pInputNext);
+        void setPrev(const Node* pInputPrev);
         Node* getNext()const;
         Node* getPrev()const;
 
@@ -21,11 +26,13 @@ class Node{
         /**
          * Constructors and deconstructors
         */
-        Node(const nodeType input, Node* pNext = NULL, Node* pPrev = NULL);
+        Node(const nodeType input, Node* pInputNext = NULL, Node* pInputPrev = NULL);
         Node();
         ~Node();
     private:
-        nodeType* data;
+        nodeType* pData;
+        Node* pNext;
+        Node* pPrev;
 };
 
 #endif
