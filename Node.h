@@ -35,4 +35,7 @@ class Node{
         Node* pPrev;
 };
 
+bool operator < (const Node& first, const Node& second);
+bool operator > (const Node& first, const Node& second);
+
 #endif

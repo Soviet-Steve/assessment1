@@ -67,3 +67,25 @@ void Node::setData(const nodeType& input){
 Node::nodeType Node::getData()const{
     return *pData;
 }
+
+bool operator < (const Node& first, const Node& second){
+    uint32_t strIndex = 0;
+    while(true){
+        if(first.getData()[strIndex] < second.getData()[strIndex] ||  second.getData()[strIndex] == '\0')
+            return true;
+        if(first.getData()[strIndex] > second.getData()[strIndex] || first.getData()[strIndex] == '\0')
+            return false;
+        strIndex++;
+    }
+}
+
+bool operator > (const Node& first, const Node& second){
+    uint32_t strIndex = 0;
+    while(true){
+        if(first.getData()[strIndex] < second.getData()[strIndex] ||  second.getData()[strIndex] == '\0')
+            return false;
+        if(first.getData()[strIndex] > second.getData()[strIndex] || first.getData()[strIndex] == '\0')
+            return true;
+        strIndex++;
+    }
+}

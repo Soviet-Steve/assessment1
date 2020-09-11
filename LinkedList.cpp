@@ -1,9 +1,10 @@
 #include "LinkedList.h"
 LinkedList::LinkedList(){
-    length = 0U;
+    inLength = 0U;
 }
 
 LinkedList::~LinkedList(){
+    
     for(pCurrent = pHead; pCurrent->getNext() == NULL; pCurrent = pCurrent->getNext()){ // Think of it like a rail worker moving along a track and taking it up as he travels
         if(pCurrent->getPrev() != NULL){
             delete pCurrent->getPrev();
@@ -23,7 +24,16 @@ LinkedList::~LinkedList(){
  * 
 */
 void LinkedList::remove(const nodeType input){
-
+    for(pCurrent = pHead; pCurrent != NULL; pCurrent = pCurrent->getNext()){
+        if(getData() == input){
+            if(pCurrent->getPrev() != NULL)
+                pCurrent->getPrev()->setNext(pCurrent->getNext());
+            if(pCurrent->getNext() != NULL)
+                pCurrent->getNext()->setPrev(pCurrent->getPrev());
+            delete pCurrent;
+            inLength--;
+        }
+    }
 } 
 
 /**
@@ -34,7 +44,18 @@ void LinkedList::remove(const nodeType input){
  * input: node data
 */
 void LinkedList::add(const nodeType input){
-
+    istringstream ss((string)input); // String stream code adopted from https://www.geeksforgeeks.org/split-a-sentence-into-words-in-cpp/
+    do{
+        string word;
+        ss >> word;        
+        addToTail(word);
+        
+        inLength++;
+    }while(ss);   
+    moveCurr(pTail->getPrev()); // SS adds a " " node to the end of the list so this removes it
+    delete pTail;
+    pTail = pCurrent;
+    pCurrent->setNext(NULL);
 } 
 
 /**
@@ -46,8 +67,14 @@ void LinkedList::add(const nodeType input){
  * 
  * returns: match count
 */
-uint32_t LinkedList::count(const nodeType input) const{
-
+uint32_t LinkedList::count(const nodeType input){ // Const not here so that pCurrent can accessed, working on this
+    uint32_t count = 0;
+    for(pCurrent = pHead; pCurrent != NULL; pCurrent = pCurrent->getNext()){
+        if(getData() == input){
+            count++;
+        }
+    }
+    return count;
 }
 
 
@@ -57,7 +84,26 @@ uint32_t LinkedList::count(const nodeType input) const{
  * Searches through the LinkedLink and sorts the data inside the nodes with bubble sort
 */
 void LinkedList::sort(){
-
+    moveCurr(pHead);
+    Node* tmp;
+    uint32_t swapped;
+    for(uint32_t i = 0; i <= inLength; i++){
+        swapped = 0;
+        for(uint32_t j = 0; j < inLength - i - 1; j++){
+            if(pCurrent > pCurrent->getNext()){
+                tmp = pCurrent;
+                pCurrent->setNext(tmp->getNext()->getNext());
+                pCurrent->setPrev(pCurrent);
+                tmp->getNext()->setPrev(tmp->getPrev());
+                tmp->getNext()->setNext(tmp->getNext());
+                swapped = 1;
+            }
+            moveCurr(pCurrent->getNext());
+        }
+        if(!swapped){
+            break;
+        }
+    }
 }
 
 
@@ -81,7 +127,7 @@ void LinkedList::insert(const nodeType input){
  * 
 */
 void LinkedList::extract(){
-
+    
 }
 
 
@@ -90,8 +136,17 @@ void LinkedList::extract(){
  * 
  * Used to add a node to the start of a linkedlist
 */
-void LinkedList::addToHead(){
-
+void LinkedList::addToHead(const nodeType input){
+    if(inLength == 0){
+        Node* newNode = new Node(input, NULL, NULL);
+        pTail = newNode;
+        pHead = newNode;
+        pCurrent = newNode;
+        return;
+    }
+    Node* newNode = new Node(input, NULL, pHead);
+    pHead->setNext(newNode);
+    pHead = newNode;    
 }
 
 
@@ -100,8 +155,18 @@ void LinkedList::addToHead(){
  * 
  * Used to add a node to the end of a linkedlist
 */
-void LinkedList::addToTail(){
-
+void LinkedList::addToTail(const nodeType input){
+    // cout << input << " "; // Used to test the inputs
+    if(inLength == 0){
+        Node* newNode = new Node(input, NULL, NULL);
+        pTail = newNode;
+        pHead = newNode;
+        pCurrent = newNode;
+        return;
+    }
+    Node* newNode = new Node(input, NULL, pTail);
+    pTail->setNext(newNode);
+    pTail = newNode;
 }
 
 
@@ -110,23 +175,54 @@ void LinkedList::addToTail(){
  * 
  * Used to add a node to the middle of a linkedlist
 */
-void LinkedList::addInternal(){
-
+void LinkedList::addInternal(const nodeType input){
+    Node* newNode = new Node(input, pCurrent, pCurrent->getNext());
+    pCurrent->setPrev( newNode );
+    newNode->getPrev()->setNext(newNode); 
+    pCurrent = pHead; 
 }
 
 
-ostream& operator << (ostream& out, const LinkedList& list){
-    for(list->pCurrent = list->pHead; list->pCurrent != NULL; list->pCurrent = list->pCurrent->getNext();){ // TODO: Double check pointers, also gogarty is a mad lad
-        if(list->pCurrent->getNext() != NULL)
-            out << list->pCurrent->getData() << " "; // Space needed as that's how the output is requested
+Node::nodeType LinkedList::getData() const{
+    return pCurrent->getData();
+}
+
+Node* LinkedList::getHead() const{
+    return pHead;
+}
+
+Node* LinkedList::getCurrent() const{
+    return pCurrent;
+}
+
+Node* LinkedList::getTail() const{
+    return pTail;
+}
+
+
+void LinkedList::moveCurr(const Node* input){
+    pCurrent = (Node *)input;
+}
+
+
+
+ostream& operator << (ostream& out, LinkedList& list){
+    for(list.moveCurr(list.getHead()); list.getCurrent() != NULL; list.moveCurr(list.getCurrent()->getNext())){ 
+        if(list.getCurrent()->getNext() != NULL)
+            cout << (LinkedList::nodeType)list.getCurrent()->getData() << " "; // Space needed as that's how the output is requested
         else
-            out << list->pCurrent->getData(); // Document also doesn't have spaces at the end
+            cout << (LinkedList::nodeType)list.getCurrent()->getData(); // Document also doesn't have spaces at the end
     }   
     return out; // ostream is great because I don't have to worry about append.
 }
 
-void operator += (LinkedList& head, const LinkedList& tail){
-    for(tail->pCurrent = tail->pHead; tail->pCurrent != NULL; tail->pCurrent = tail->pCurrent->getNext();) // This part "rotates" through the linked list
-        head->add(tail->pCurrent->getData()); // Seems really ineffient to just copy the data like this but... it works?
+
+
+
+
+void operator += (LinkedList& first, LinkedList& second){
+    for(second.moveCurr(second.getHead()); second.getCurrent() != NULL; second.moveCurr(second.getCurrent()->getNext())){
+        first.add(second.getData());
+    }
     return;
 } 

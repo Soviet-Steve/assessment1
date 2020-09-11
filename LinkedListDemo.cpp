@@ -20,20 +20,24 @@ void initialize(LinkedList &l1, LinkedList &l2)
 
 int main()
 {
-    LinkedList firstList;
+	LinkedList firstList;
 	LinkedList secondList;
 	
 	initialize(firstList, secondList);
-
 	cout << "Start lists:" << endl;
 	cout << "List 1: " << firstList  <<  endl;
 	cout << "List 2: " << secondList <<  endl << endl;
+	
+	// Junk test code
+	//firstList.moveCurr(firstList.getHead());
+	//cout << firstList.getData();
 
+	
 	cout << "Concatenating the two lists onto list '1':" << endl;
 	firstList += secondList;
     cout << "List 1: " << firstList  << endl;
 	cout << "List 2: " << secondList << endl << endl;
-
+	
 	cout << "Removing the word 'was' from list '1':" << endl;
     firstList.remove("was");
     cout << "List 1: " << firstList  << endl;
@@ -49,7 +53,7 @@ int main()
     secondList.remove("cat");
     cout << "List 1: " << firstList  << endl;
 	cout << "List 2: " << secondList << endl << endl;
-
+	
 	cout << "Number of occurrences of 'black' in list 1: ";
 	cout << firstList.count("black") << endl << endl;
 	
@@ -59,11 +63,12 @@ int main()
 //	secondList.remove("on the black");
 //	cout << "List 1: " << firstList  << endl;
 //	cout << "List 2: " << secondList << endl << endl;
-
+	/*
 	cout << "Sorting list 1:" << endl;
 	firstList.sort();
 	cout << firstList << endl << endl;
-
+	*/
 	cout << "The program has finished." << endl;
 	return 0;
+	
 }
