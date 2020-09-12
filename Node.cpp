@@ -68,6 +68,7 @@ Node::nodeType Node::getData()const{
     return *pData;
 }
 
+/*
 bool operator < (const Node& first, const Node& second){
     uint32_t strIndex = 0;
     while(true){
@@ -78,14 +79,48 @@ bool operator < (const Node& first, const Node& second){
         strIndex++;
     }
 }
+*/
 
 bool operator > (const Node& first, const Node& second){
-    uint32_t strIndex = 0;
-    while(true){
-        if(first.getData()[strIndex] < second.getData()[strIndex] ||  second.getData()[strIndex] == '\0')
+    const char *a = first.getData().c_str();
+    const char *b = second.getData().c_str();
+    uint32_t i = 0;
+    while (true) {
+        if (a[i] == 0) {
             return false;
-        if(first.getData()[strIndex] > second.getData()[strIndex] || first.getData()[strIndex] == '\0')
+        } else if (b[i] == 0) {
             return true;
-        strIndex++;
+        }   
+        if (a[i] == b[i]) {
+            i++;
+            continue;
+        } else {
+            if (a[i] > b[i]) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
+    /*
+    // return (first.getData() > second.getData());
+    uint32_t i = 0;
+    while (true) {
+        if (first.getData()[i] == 0) {
+            return false;
+        } else if (second.getData()[i] == 0) {
+            return true;
+        }   
+        if (first.getData()[i] == second.getData()[i]) {
+            i++;
+            continue;
+        } else {
+            if (first.getData()[i] > second.getData()[i]) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    */
 }

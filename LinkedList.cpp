@@ -1,4 +1,7 @@
 #include "LinkedList.h"
+
+#define DEBUG
+
 LinkedList::LinkedList(){
     inLength = 0U;
 }
@@ -49,13 +52,13 @@ void LinkedList::add(const nodeType input){
         string word;
         ss >> word;        
         addToTail(word);
-        
         inLength++;
     }while(ss);   
     moveCurr(pTail->getPrev()); // SS adds a " " node to the end of the list so this removes it
     delete pTail;
     pTail = pCurrent;
     pCurrent->setNext(NULL);
+    inLength--;
 } 
 
 /**
@@ -84,26 +87,16 @@ uint32_t LinkedList::count(const nodeType input){ // Const not here so that pCur
  * Searches through the LinkedLink and sorts the data inside the nodes with bubble sort
 */
 void LinkedList::sort(){
-    moveCurr(pHead);
-    Node* tmp;
-    uint32_t swapped;
-    for(uint32_t i = 0; i <= inLength; i++){
-        swapped = 0;
-        for(uint32_t j = 0; j < inLength - i - 1; j++){
-            if(pCurrent > pCurrent->getNext()){
-                tmp = pCurrent;
-                pCurrent->setNext(tmp->getNext()->getNext());
-                pCurrent->setPrev(pCurrent);
-                tmp->getNext()->setPrev(tmp->getPrev());
-                tmp->getNext()->setNext(tmp->getNext());
-                swapped = 1;
+    Node* pTemp = NULL;
+    Node* pIndex = NULL;
+    for(pTemp = pHead; pTemp != pTail; pTemp = pTemp->getNext()){
+       for(pIndex = pTemp; pIndex != NULL; pIndex = pIndex->getNext()){
+            if(pTemp->getData() > pIndex->getData()/* (pTemp > pIndex)*/){
+                //cout << "(" << pTemp->getData() << ") > (" << pIndex->getData() << ")" << endl;
+                swapText(pTemp, pIndex);
             }
-            moveCurr(pCurrent->getNext());
         }
-        if(!swapped){
-            break;
-        }
-    }
+     }
 }
 
 
@@ -204,6 +197,30 @@ void LinkedList::moveCurr(const Node* input){
     pCurrent = (Node *)input;
 }
 
+/**
+ * 
+ */
+void LinkedList::swapText(Node* first, Node* second){ // This *should* be done by moving the pointers around, and it will be done later on, but this is easier to test
+    /*
+    Node* tmpNext = first->getNext();
+    Node* tmpPrev = first->getPrev();
+    // Node* tmp = first;
+
+    first->setPrev(second->getPrev());
+    first->setNext(second->getNext());
+    // first = second;
+
+    second->setPrev(tmpPrev);
+    second->setNext(tmpNext);
+    // second = tmp;
+    */
+
+    
+    nodeType tmp = first->getData();
+    first->setData(second->getData());
+    second->setData(tmp);     
+    
+}
 
 
 ostream& operator << (ostream& out, LinkedList& list){

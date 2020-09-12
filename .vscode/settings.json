@@ -3,7 +3,13 @@
     "terminal.integrated.shell.windows": "C:\\cygwin64\\Cygwin.bat",
     "files.associations": {
         "iosfwd": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "exception": "cpp",
+        "memory": "cpp",
+        "sstream": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "xstring": "cpp"
     },
     // "terminal.integrated.shell.windows": "C:\\Cygwin64\\bin\\bash.exe",
     // "terminal.integrated.shellArgs.windows": ["/bin/xhere", "/bin/zsh"]

@@ -27,6 +27,7 @@ class LinkedList{
         LinkedList(/* args */);
         ~LinkedList();
     private:
+        void swapText(Node* first, Node* second);
         void insert(const nodeType input);
         void extract(); // This is the remove function but for a single word.
         void addToHead(const nodeType input); // 3 Smaller functions that add to the linked list.
@@ -35,7 +36,7 @@ class LinkedList{
         uint32_t inLength; // Everytime the add function gets called the data 
         Node* pHead;
         Node* pTail;
-        Node* pCurrent;
+        Node* pCurrent; // NOT A TEMPORARY VARIBLE BEING USED HERE THIS IS USED FOR GRABBING DATA OUT OF THE LINKED LIST
 };
 
 ostream& operator << (ostream& out, LinkedList& list);

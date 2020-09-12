@@ -1,6 +1,7 @@
 #ifndef BEN_NODE
 #define BEN_NODE
 #include <string>
+#include <string.h>
 #include <iostream>
 #include <cstdlib>
 using namespace std;
@@ -35,7 +36,7 @@ class Node{
         Node* pPrev;
 };
 
-bool operator < (const Node& first, const Node& second);
+// bool operator < (const Node& first, const Node& second);
 bool operator > (const Node& first, const Node& second);
 
 #endif
